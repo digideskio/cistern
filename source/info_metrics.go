@@ -3,6 +3,8 @@ package source
 import (
 	"github.com/Cistern/cistern/message"
 	metricsPackage "github.com/Cistern/cistern/state/metrics"
+
+	"log"
 )
 
 const InfoMetricsClassName = "metrics"
@@ -40,7 +42,7 @@ func (c *InfoMetricsClass) Process(m *message.Message) {
 	c.registry.Lock()
 	defer c.registry.Unlock()
 	for name, v := range metricsData {
-		c.registry.Update(name, v.Type, v.Value)
-		//log.Printf("%s,source=%s value=%f %d", name, c.sourceAddress, updatedState, m.Timestamp*1e9)
+		updatedState := c.registry.Update(name, v.Type, v.Value)
+		log.Printf("%s,source=%s value=%f %d", name, c.sourceAddress, updatedState, m.Timestamp*1e9)
 	}
 }
